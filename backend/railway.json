@@ -4,6 +4,6 @@
   },
   "deploy": {
     "startCommand": "node server.js",
-    "preDeployCommand": "npx sequelize-cli db:migrate"
+    "preDeployCommand": "npx sequelize db:migrate"
   }
 }
