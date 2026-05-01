@@ -39,11 +39,9 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('Database connected...');
     
-    // In production, migrations are run separately. 
-    // In dev, we can use sync({ alter: true }) or migrations.
-    if (process.env.NODE_ENV !== 'production') {
-      // await sequelize.sync({ alter: true });
-    }
+    // Auto-sync database schema in all environments
+    await sequelize.sync({ alter: true });
+    console.log('Database synced...');
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -3,7 +3,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "node server.js",
-    "preDeployCommand": "npm run migrate"
+    "startCommand": "node server.js"
   }
 }
