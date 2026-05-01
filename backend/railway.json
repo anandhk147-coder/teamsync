@@ -4,7 +4,8 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && npm start",
+    "preDeployCommand": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "startCommand": "npm start",
     "restartPolicyType": "ON_FAILURE",
     "healthcheckPath": "/",
     "healthcheckTimeout": 100,
