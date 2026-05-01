@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-bg-light: #F8F9FC;
+  --color-card-border: #E8EAF0;
+}
+
+:root {
+  --primary: #3B82F6;
+  --bg-light: #F8F9FC;
+  --border: #E8EAF0;
+  --text-main: #1A1C21;
+  --text-muted: #64748B;
+}
+
+@layer base {
+  * {
+    font-family: 'Inter', 'DM Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    @apply bg-[#F8F9FC] text-[#1A1C21] min-h-screen antialiased;
+  }
+}
+
+@layer components {
+  .white-card {
+    @apply bg-white border border-[#E8EAF0] rounded-[12px] p-5 shadow-sm transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-all active:scale-95 shadow-sm;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white border border-[#E8EAF0] rounded-lg text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all;
+  }
+
+  .badge {
+    @apply px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider;
+  }
+
+  .badge-admin {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .badge-member {
+    @apply bg-slate-100 text-slate-700;
+  }
+}
