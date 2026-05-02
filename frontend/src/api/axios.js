@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+let baseUrlEnv = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+if (baseUrlEnv && !baseUrlEnv.endsWith('/api')) {
+  baseUrlEnv = `${baseUrlEnv}/api`;
+}
+
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: baseUrlEnv,
 });
 
 instance.interceptors.request.use(

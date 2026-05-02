@@ -59,6 +59,23 @@ const startServer = async () => {
     await sequelize.sync({ alter: true });
     console.log('Database synced...');
 
+    // Automatically seed missing default users
+    const { User } = require('./models');
+    const bcrypt = require('bcryptjs');
+    
+    const seedUser = async (email, name, password, role) => {
+      const exists = await User.findOne({ where: { email } });
+      if (!exists) {
+        const salt = await bcrypt.genSalt(10);
+        const password_hash = await bcrypt.hash(password, salt);
+        await User.create({ name, email, password_hash, role });
+        console.log(`Seeded ${role} user: ${email}`);
+      }
+    };
+    
+    await seedUser('admin@app.com', 'Admin User', 'Admin@1234', 'admin');
+    await seedUser('member@test.com', 'Member User', 'Member@1234', 'member');
+
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
