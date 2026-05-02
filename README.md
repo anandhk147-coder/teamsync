@@ -1,5 +1,6 @@
 # TeamSync - Project & Task Management App
 
+
 A full-stack Project & Task Management application with Role-Based Access Control.
 
 ## Features
@@ -13,23 +14,33 @@ A full-stack Project & Task Management application with Role-Based Access Contro
 ## Tech Stack
 - **Backend**: Node.js, Express.js, Sequelize ORM, PostgreSQL.
 - **Frontend**: React, Vite, Tailwind CSS 4, Lucide Icons, Framer Motion.
-- **Deployment**: Railway (Backend + DB), Vercel (Frontend).
+- **Deployment**: Render (Backend Web Service + PostgreSQL + Frontend Static Site).
 
-## Setup
+## Setup (Local)
 
 ### Backend
 1. `cd backend`
 2. `npm install`
 3. Create `.env` file with `DATABASE_URL`, `JWT_SECRET`, and `PORT`.
-4. `npx sequelize-cli db:migrate`
-5. `npx sequelize-cli db:seed:all`
-6. `npm run dev`
+4. `npm run dev`
 
 ### Frontend
 1. `cd frontend`
 2. `npm install`
 3. Create `.env` file with `VITE_API_URL`.
 4. `npm run dev`
+
+## 🚀 Deploy to Render (One-Click Blueprint)
+
+1. Push this repo to GitHub.
+2. Go to [render.com](https://render.com) and log in.
+3. Click **New → Blueprint**.
+4. Connect your GitHub repository.
+5. Render will automatically detect `render.yaml` and prompt you to create:
+   - PostgreSQL Database
+   - Node.js Web Service (Backend)
+   - Static Site (Frontend)
+6. Click **Apply** and wait for deployment to finish!
 
 ## API Endpoints
 
