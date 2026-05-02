@@ -61,15 +61,22 @@ const startServer = async () => {
 
     // Automatically seed missing default users
     const { User } = require('./models');
-    const bcrypt = require('bcryptjs');
     
     const seedUser = async (email, name, password, role) => {
-      const exists = await User.findOne({ where: { email } });
-      if (!exists) {
-        const salt = await bcrypt.genSalt(10);
-        const password_hash = await bcrypt.hash(password, salt);
-        await User.create({ name, email, password_hash, role });
-        console.log(`Seeded ${role} user: ${email}`);
+      try {
+        const exists = await User.findOne({ where: { email } });
+        if (!exists) {
+          // Pass raw password, model hook will hash it
+          await User.create({ name, email, password_hash: password, role });
+          console.log(`Seeded ${role} user: ${email}`);
+        } else {
+          // Force update to fix the double-hashed bug from previous version
+          exists.password_hash = password;
+          await exists.save();
+          console.log(`Updated password for ${email}`);
+        }
+      } catch (err) {
+        console.error(`Failed to seed ${email}:`, err.message);
       }
     };
     
