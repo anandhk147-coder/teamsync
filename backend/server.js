@@ -20,7 +20,7 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+    if (allowedOrigins.includes(origin) || (origin && origin.endsWith('.onrender.com')) || process.env.NODE_ENV !== 'production') {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
