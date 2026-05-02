@@ -83,6 +83,66 @@ const startServer = async () => {
     await seedUser('admin@app.com', 'Admin User', 'Admin@1234', 'admin');
     await seedUser('member@test.com', 'Member User', 'Member@1234', 'member');
 
+    // Automatically seed projects and tasks if none exist
+    const { Project, Task } = require('./models');
+    try {
+      const projectCount = await Project.count();
+      if (projectCount === 0) {
+        const adminUser = await User.findOne({ where: { email: 'admin@app.com' } });
+        const memberUser = await User.findOne({ where: { email: 'member@test.com' } });
+        
+        if (adminUser) {
+          console.log('Seeding sample projects and tasks...');
+          
+          // Project 1: Website Redesign
+          const p1 = await Project.create({
+            name: 'Website Redesign 2026',
+            description: 'Overhauling the main corporate website with a modern look.',
+            status: 'active',
+            deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+            ownerId: adminUser.id
+          });
+          
+          await Task.bulkCreate([
+            { title: 'Design Mockups', description: 'Create Figma mockups', status: 'done', priority: 'high', projectId: p1.id, assigneeId: adminUser.id },
+            { title: 'Frontend Setup', description: 'Initialize React/Vite', status: 'in_progress', priority: 'high', projectId: p1.id, assigneeId: adminUser.id },
+            { title: 'API Integration', description: 'Connect to Render backend', status: 'todo', priority: 'medium', projectId: p1.id, assigneeId: memberUser?.id }
+          ]);
+
+          // Project 2: Mobile App MVP
+          const p2 = await Project.create({
+            name: 'Mobile App MVP',
+            description: 'First version of the iOS and Android application.',
+            status: 'active',
+            deadline: new Date(new Date().setMonth(new Date().getMonth() + 3)),
+            ownerId: adminUser.id
+          });
+          
+          await Task.bulkCreate([
+            { title: 'User Auth Flow', description: 'Login/Register screens', status: 'todo', priority: 'high', projectId: p2.id, assigneeId: adminUser.id },
+            { title: 'Database Schema', description: 'Design offline-first DB', status: 'in_progress', priority: 'medium', projectId: p2.id, assigneeId: adminUser.id }
+          ]);
+
+          // Project 3: Marketing Campaign
+          const p3 = await Project.create({
+            name: 'Q3 Marketing Campaign',
+            description: 'Assets and planning for the Q3 product launch.',
+            status: 'completed',
+            deadline: new Date(new Date().setDate(new Date().getDate() - 5)),
+            ownerId: adminUser.id
+          });
+
+          await Task.bulkCreate([
+            { title: 'Write copy', description: 'Ad copy for social media', status: 'done', priority: 'low', projectId: p3.id, assigneeId: adminUser.id }
+          ]);
+          
+          console.log('Successfully seeded sample projects and tasks!');
+        }
+      }
+    } catch (err) {
+      console.error('Failed to seed projects/tasks:', err.message);
+    }
+
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
