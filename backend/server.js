@@ -87,7 +87,12 @@ const startServer = async () => {
     const { Project, Task } = require('./models');
     try {
       const projectCount = await Project.count();
-      if (projectCount === 0) {
+      if (projectCount <= 3) { // Force re-seed to apply Member assignments
+        await Task.destroy({ where: {} });
+        const { Member } = require('./models');
+        await Member.destroy({ where: {} });
+        await Project.destroy({ where: {} });
+        
         const adminUser = await User.findOne({ where: { email: 'admin@app.com' } });
         const memberUser = await User.findOne({ where: { email: 'member@test.com' } });
         
@@ -135,6 +140,18 @@ const startServer = async () => {
           await Task.bulkCreate([
             { title: 'Write copy', description: 'Ad copy for social media', status: 'done', priority: 'low', projectId: p3.id, assigneeId: adminUser.id }
           ]);
+          
+          if (memberUser) {
+            const { Member } = require('./models');
+            await Member.bulkCreate([
+              { projectId: p1.id, userId: memberUser.id, role: 'member' },
+              { projectId: p2.id, userId: memberUser.id, role: 'member' },
+              { projectId: p3.id, userId: memberUser.id, role: 'member' }
+            ]);
+            
+            // Assign some extra tasks to member
+            await Task.update({ assigneeId: memberUser.id }, { where: { title: ['User Auth Flow', 'Design Mockups'] }});
+          }
           
           console.log('Successfully seeded sample projects and tasks!');
         }
