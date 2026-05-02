@@ -64,6 +64,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Unable to connect to the database:', error);
+    process.exit(1);
   }
 };
 
